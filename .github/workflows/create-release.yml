@@ -1,0 +1,73 @@
+---
+name: Create release
+
+on:  # yamllint disable-line rule:truthy
+  push:
+    tags:
+      - 'v*.*.*'
+
+defaults:
+  run:
+    shell: sh
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get tool versions
+        id: versions
+        run: |
+          echo "hadolint=$(sh ./scripts/get-tool-version.sh hadolint)" >> $GITHUB_OUTPUT
+          echo "actionlint=$(sh ./scripts/get-tool-version.sh actionlint)" >> $GITHUB_OUTPUT
+          echo "pre-commit=$(sh ./scripts/get-tool-version.sh pre-commit)" >> $GITHUB_OUTPUT
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          build-args: |
+            PRE_COMMIT_VERSION=${{ steps.versions.outputs.pre-commit }}
+            ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
+            HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+  create-release:
+    name: Create release
+    needs: [publish]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get changelog
+        id: changelog
+        uses: simbo/changes-since-last-release-action@v1
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          name: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            # Changelog
+
+            ${{ steps.changelog.outputs.log }}
+          draft: false
+          prerelease: false
