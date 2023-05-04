@@ -1,5 +1,5 @@
 ---
-name: Create release
+name: Release
 
 on: # yamllint disable-line rule:truthy
   push:
@@ -55,6 +55,8 @@ jobs:
     name: Create release
     needs: [publish]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:

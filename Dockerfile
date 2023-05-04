@@ -22,7 +22,7 @@ RUN python -m pip install --upgrade --no-cache-dir \
 RUN wget -O /usr/local/bin/yq -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
     && chmod +x /usr/local/bin/yq
 # actionlint
-RUN bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash) ${ACTIONLINT_VERSION}
+RUN go install github.com/rhysd/actionlint/cmd/actionlint@v${ACTIONLINT_VERSION}
 # hadolint
 RUN wget -O /usr/local/bin/hadolint -q https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64 \
     && chmod +x /usr/local/bin/hadolint
