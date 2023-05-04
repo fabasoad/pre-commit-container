@@ -9,7 +9,6 @@ RUN apk add --no-cache --update \
     bash=5.2.15-r0 \
     build-base=0.5-r3 \
     git=2.38.5-r0 \
-    nodejs=18.14.2-r0 \
     openntpd=6.8_p1-r7 \
     py3-pip=22.3.1-r1 \
     python3-dev=3.10.11-r0 \
