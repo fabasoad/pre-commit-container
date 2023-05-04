@@ -1,0 +1,11 @@
+---
+default: true
+line-length:
+  code_blocks: false
+  tables: false
+first-line-h1: false
+no-inline-html:
+  allowed_elements:
+    - details
+    - img
+    - summary

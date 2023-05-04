@@ -1,10 +1,10 @@
 ---
 name: Create release
 
-on:  # yamllint disable-line rule:truthy
+on: # yamllint disable-line rule:truthy
   push:
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
 
 defaults:
   run:
@@ -72,5 +72,9 @@ jobs:
             # Changelog
 
             ${{ steps.changelog.outputs.log }}
+
+            ---
+
+            [ghcr.io/fabasoad/pre-commit-container:${{ github.ref }}](https://github.com/fabasoad/pre-commit-container/pkgs/container/pre-commit-container)
           draft: false
           prerelease: false
