@@ -77,6 +77,6 @@ jobs:
 
             ---
 
-            [ghcr.io/fabasoad/pre-commit-container:${{ github.ref }}](https://github.com/fabasoad/pre-commit-container/pkgs/container/pre-commit-container)
+            [ghcr.io/fabasoad/pre-commit-container:${{ github.ref_name }}](https://github.com/fabasoad/pre-commit-container/pkgs/container/pre-commit-container)
           draft: false
           prerelease: false
