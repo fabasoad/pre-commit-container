@@ -1,0 +1,67 @@
+---
+default_install_hook_types: ["pre-commit", "pre-push"]
+default_stages: ["push"]
+minimum_pre_commit_version: 2.18.0
+repos:
+  # Security
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        stages: ["commit", "push"]
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.16.3
+    hooks:
+      - id: gitleaks
+        stages: ["commit", "push"]
+  # Shell
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.2
+    hooks:
+      - id: shellcheck
+  # Dockerfile
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.1-beta
+    hooks:
+      - id: hadolint
+        exclude: ^(.*\.dockerignore)$
+  # Markdown
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.33.0
+    hooks:
+      - id: markdownlint-fix
+        stages: ["commit", "push"]
+  # Yaml
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.31.0
+    hooks:
+      - id: yamllint
+  # GitHub Actions
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.6.24
+    hooks:
+      - id: actionlint
+        args: ["-shellcheck=", "-pyflakes="]
+  # Other
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.0-alpha.9-for-vscode
+    hooks:
+      - id: prettier
+        stages: ["commit"]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-merge-conflict
+        stages: ["commit"]
+      - id: check-json
+      - id: detect-private-key
+        stages: ["commit", "push"]
+      - id: end-of-file-fixer
+        stages: ["commit", "push"]
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+        stages: ["commit", "push"]
+      - id: no-commit-to-branch
+        stages: ["commit"]
+      - id: trailing-whitespace
+        stages: ["commit", "push"]
