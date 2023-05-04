@@ -6,7 +6,7 @@ on: # yamllint disable-line rule:truthy
     branches:
       - main
     paths:
-      - .github/labels.yml
+      - .github/labels.json
       - .github/workflows/sync-labels.yml
   workflow_dispatch:
 
@@ -17,8 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run Label Syncer
-        uses: micnncim/action-label-syncer@v1
+        uses: lannonbr/issue-label-manager-action@3.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          manifest: .github/labels.yml
+          delete: true
