@@ -16,5 +16,5 @@ podman build \
   --build-arg "ACTIONLINT_VERSION=$actionlint_version" \
   --build-arg "PRE_COMMIT_VERSION=$pre_commit_version" \
   --build-arg "HADOLINT_VERSION=$hadolint_version" \
-  --file "$ROOT_PATH/Dockerfile" \
+  --file "$ROOT_PATH/src/$(uname -m).dockerfile" \
   .
