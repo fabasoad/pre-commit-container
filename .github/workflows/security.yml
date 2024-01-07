@@ -1,0 +1,91 @@
+---
+name: Security
+
+on: # yamllint disable-line rule:truthy
+  pull_request: {}
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: sh
+
+jobs:
+  code-scanning:
+    name: Code scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: "javascript"
+      - name: Perform CodeQL Analysis
+        id: codeql-analysis
+        uses: github/codeql-action/analyze@v3
+      - name: Upload to GHAS
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          category: "code-scanning"
+          sarif_file: "${{ steps.codeql-analysis.outputs.sarif-output }}"
+  directory-scanning:
+    name: Directory scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+      - name: Scan current project
+        id: scan-directory
+        uses: anchore/scan-action@v3
+        with:
+          by-cve: "true"
+          path: "."
+      - name: Upload to GHAS
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          category: "directory-scanning"
+          sarif_file: "${{ steps.scan-directory.outputs.sarif }}"
+  container-scanning:
+    name: Container scanning
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE_PATH: "src/x86_64.dockerfile"
+    steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+      - name: Get tool versions
+        id: versions
+        run: |
+          echo "hadolint=$(sh ./scripts/get-tool-version.sh -t hadolint)" >> "$GITHUB_OUTPUT"
+          echo "actionlint=$(sh ./scripts/get-tool-version.sh -t actionlint)" >> "$GITHUB_OUTPUT"
+          echo "pre-commit=$(sh ./scripts/get-tool-version.sh -t pre-commit)" >> "$GITHUB_OUTPUT"
+          echo "terraform=$(sh ./scripts/get-tool-version.sh -t terraform)" >> "$GITHUB_OUTPUT"
+      - name: Build image
+        id: build-image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          build-args: |
+            PRE_COMMIT_VERSION=${{ steps.versions.outputs.pre-commit }}
+            ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
+            HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
+            TERRAFORM_VERSION=${{ steps.versions.outputs.terraform }}
+          file: ${{ env.DOCKER_IMAGE_PATH }}
+          push: false
+      - name: Scan image
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: "${{ steps.build-image.outputs.digest }}"
+          args: "--file=${{ env.DOCKER_IMAGE_PATH }} --exclude-base-image-vulns --exclude-app-vulns"
+      - name: Upload to GHAS
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          category: "container-scanning"
+          sarif_file: "snyk.sarif"

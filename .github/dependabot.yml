@@ -9,3 +9,11 @@ updates:
       - "fabasoad"
     labels:
       - "dependencies"
+  - package-ecosystem: "docker"
+    directory: "src"
+    schedule:
+      interval: "monthly"
+    reviewers:
+      - "fabasoad"
+    labels:
+      - "dependencies"

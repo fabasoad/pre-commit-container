@@ -22,13 +22,15 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
       - name: Get tool versions
         id: versions
         run: |
-          echo "hadolint=$(sh ./scripts/get-tool-version.sh hadolint)" >> $GITHUB_OUTPUT
-          echo "actionlint=$(sh ./scripts/get-tool-version.sh actionlint)" >> $GITHUB_OUTPUT
-          echo "pre-commit=$(sh ./scripts/get-tool-version.sh pre-commit)" >> $GITHUB_OUTPUT
+          echo "hadolint=$(sh ./scripts/get-tool-version.sh -t hadolint)" >> "$GITHUB_OUTPUT"
+          echo "actionlint=$(sh ./scripts/get-tool-version.sh -t actionlint)" >> "$GITHUB_OUTPUT"
+          echo "pre-commit=$(sh ./scripts/get-tool-version.sh -t pre-commit)" >> "$GITHUB_OUTPUT"
+          echo "terraform=$(sh ./scripts/get-tool-version.sh -t terraform)" >> "$GITHUB_OUTPUT"
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
@@ -48,6 +50,7 @@ jobs:
             PRE_COMMIT_VERSION=${{ steps.versions.outputs.pre-commit }}
             ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
             HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
+            TERRAFORM_VERSION=${{ steps.versions.outputs.terraform }}
           file: src/x86_64.dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -59,7 +62,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Get changelog

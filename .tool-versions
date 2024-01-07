@@ -1,3 +1,4 @@
 actionlint 1.6.26
 hadolint 2.12.0
-pre-commit 3.4.0
+pre-commit 3.6.0
+terraform 1.6.6
