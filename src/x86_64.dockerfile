@@ -15,7 +15,7 @@ RUN apk add --no-cache --update \
     yarn~=1.22
 RUN python -m pip install --upgrade --no-cache-dir \
     pre-commit==${PRE_COMMIT_VERSION} \
-    setuptools==67.8.0
+    setuptools==69.0.3
 
 # yq
 RUN wget -O /usr/local/bin/yq -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
