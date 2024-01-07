@@ -11,6 +11,10 @@ defaults:
   run:
     shell: sh
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   code-scanning:
     name: Code scanning
