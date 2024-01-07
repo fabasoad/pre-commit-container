@@ -40,5 +40,10 @@ RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform
     && unzip terraform_${TERRAFORM_VERSION}_linux_arm64.zip \
     && rm -f terraform_${TERRAFORM_VERSION}_linux_arm64.zip \
     && mv terraform /usr/local/bin/terraform
+# tflint
+RUN wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_arm64.zip \
+    && unzip tflint_linux_arm64.zip \
+    && rm -f tflint_linux_arm64.zip \
+    && mv tflint /usr/local/bin/tflint
 
-CMD ["/bin/bash"]
+CMD bash --version;git --version;pip --version;python --version;printf "yarn ";yarn --version;printf "npm ";npm --version;yq --version;printf "actionlint ";actionlint --version;printf "Hadolint. ";hadolint --version;printf "coursier ";coursier version;terraform --version;tflint --version;/bin/sh
