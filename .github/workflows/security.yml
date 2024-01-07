@@ -52,6 +52,8 @@ jobs:
   container-scanning:
     name: Container scanning
     runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE_PATH: "src/x86_64.dockerfile"
     steps:
       - name: Checkout ${{ github.repository }}
         uses: actions/checkout@v4
@@ -70,15 +72,15 @@ jobs:
             PRE_COMMIT_VERSION=${{ steps.versions.outputs.pre-commit }}
             ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
             HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
-          file: src/x86_64.dockerfile
+          file: ${{ env.DOCKER_IMAGE_PATH }}
           push: false
       - name: Scan image
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: ${{ steps.build-image.outputs.imageid }}
-          args: --file=src/x86_64.dockerfile
+          image: "${{ steps.build-image.outputs.digest }}"
+          args: "--file=${{ env.DOCKER_IMAGE_PATH }} --exclude-base-image-vulns"
       - name: Upload to GHAS
         if: always()
         uses: github/codeql-action/upload-sarif@v3
