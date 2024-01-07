@@ -60,9 +60,10 @@ jobs:
       - name: Get tool versions
         id: versions
         run: |
-          echo "hadolint=$(sh ./scripts/get-tool-version.sh hadolint)" >> $GITHUB_OUTPUT
-          echo "actionlint=$(sh ./scripts/get-tool-version.sh actionlint)" >> $GITHUB_OUTPUT
-          echo "pre-commit=$(sh ./scripts/get-tool-version.sh pre-commit)" >> $GITHUB_OUTPUT
+          echo "hadolint=$(sh ./scripts/get-tool-version.sh -t hadolint)" >> "$GITHUB_OUTPUT"
+          echo "actionlint=$(sh ./scripts/get-tool-version.sh -t actionlint)" >> "$GITHUB_OUTPUT"
+          echo "pre-commit=$(sh ./scripts/get-tool-version.sh -t pre-commit)" >> "$GITHUB_OUTPUT"
+          echo "terraform=$(sh ./scripts/get-tool-version.sh -t terraform)" >> "$GITHUB_OUTPUT"
       - name: Build image
         id: build-image
         uses: docker/build-push-action@v5
@@ -72,6 +73,7 @@ jobs:
             PRE_COMMIT_VERSION=${{ steps.versions.outputs.pre-commit }}
             ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
             HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
+            TERRAFORM_VERSION=${{ steps.versions.outputs.terraform }}
           file: ${{ env.DOCKER_IMAGE_PATH }}
           push: false
       - name: Scan image
