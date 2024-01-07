@@ -49,3 +49,39 @@ jobs:
         with:
           category: "directory-scanning"
           sarif_file: "${{ steps.scan-directory.outputs.sarif }}"
+  container-scanning:
+    name: Container scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+      - name: Get tool versions
+        id: versions
+        run: |
+          echo "hadolint=$(sh ./scripts/get-tool-version.sh hadolint)" >> $GITHUB_OUTPUT
+          echo "actionlint=$(sh ./scripts/get-tool-version.sh actionlint)" >> $GITHUB_OUTPUT
+          echo "pre-commit=$(sh ./scripts/get-tool-version.sh pre-commit)" >> $GITHUB_OUTPUT
+      - name: Build image
+        id: build-image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          build-args: |
+            PRE_COMMIT_VERSION=${{ steps.versions.outputs.pre-commit }}
+            ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
+            HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
+          file: src/x86_64.dockerfile
+          push: false
+      - name: Scan image
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: ${{ steps.build-image.outputs.imageid }}
+          args: --file=src/x86_64.dockerfile
+      - name: Upload to GHAS
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          category: "container-scanning"
+          sarif_file: "snyk.sarif"
