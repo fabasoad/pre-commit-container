@@ -15,9 +15,9 @@ RUN apk add --no-cache --update \
     yarn~=1.22
 RUN apk add --no-cache --update --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
     npm~=10
-RUN python -m pip install --upgrade --no-cache-dir \
+RUN python -m pip install --upgrade --no-cache-dir --break-system-packages \
     pre-commit==${PRE_COMMIT_VERSION} \
-    setuptools==69.0.3
+    setuptools==69.5.1
 
 # yq
 RUN wget -O /usr/local/bin/yq -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
