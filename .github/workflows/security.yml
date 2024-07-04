@@ -67,7 +67,7 @@ jobs:
     permissions:
       contents: read
       security-events: write
-    uses: fabasoad/reusable-workflows/.github/workflows/wf-security-sast.yml@fix/image-sast
+    uses: fabasoad/reusable-workflows/.github/workflows/wf-security-sast.yml@8af755ef0ec4279c62289cde8b33d56d3934c241
     with:
       image: true
       image-artifact-name: "${{ needs.build-image.outputs.artifact-name }}"
