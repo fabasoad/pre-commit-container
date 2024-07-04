@@ -21,11 +21,12 @@ repos:
           - --hook-args=--log-level debug
         stages: ["push"]
   # Shell
-  - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.10.0.1
+  - repo: https://github.com/openstack/bashate
+    rev: 2.1.1
     hooks:
-      - id: shellcheck
-        stages: ["push"]
+      - id: bashate
+        #        args: [ "-i", "E003,E006" ]
+        stages: ["commit"]
   # Dockerfile
   - repo: https://github.com/hadolint/hadolint
     rev: v2.13.0-beta
