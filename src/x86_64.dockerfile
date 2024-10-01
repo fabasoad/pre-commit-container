@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 bellsoft/liberica-openjdk-alpine:22
+FROM --platform=linux/amd64 bellsoft/liberica-openjdk-alpine:23
 
 ARG ACTIONLINT_VERSION
 ARG PRE_COMMIT_VERSION
