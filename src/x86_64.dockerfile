@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 bellsoft/liberica-openjdk-alpine:22
+FROM --platform=linux/amd64 bellsoft/liberica-openjdk-alpine:23
 
 ARG ACTIONLINT_VERSION
 ARG PRE_COMMIT_VERSION
@@ -10,14 +10,14 @@ RUN apk add --no-cache --update \
     build-base~=0.5 \
     git~=2 \
     openntpd~=6 \
-    py3-pip~=23 \
-    python3-dev~=3.11 \
+    py3-pip~=24 \
+    python3-dev~=3.12 \
     yarn~=1.22
 RUN apk add --no-cache --update --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
     npm~=10
 RUN python -m pip install --upgrade --no-cache-dir --break-system-packages \
     pre-commit==${PRE_COMMIT_VERSION} \
-    setuptools==69.5.1
+    setuptools==75.1.0
 
 # yq
 RUN wget -O /usr/local/bin/yq -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
