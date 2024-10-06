@@ -17,7 +17,7 @@ RUN apk add --no-cache --update --repository=https://dl-cdn.alpinelinux.org/alpi
     npm~=10
 RUN python -m pip install --upgrade --no-cache-dir --break-system-packages \
     pre-commit==${PRE_COMMIT_VERSION} \
-    setuptools==69.5.1
+    setuptools==75.1.0
 
 # yq
 RUN wget -O /usr/local/bin/yq -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \

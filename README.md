@@ -6,4 +6,4 @@
 ![linting](https://github.com/fabasoad/pre-commit-container/actions/workflows/linting.yml/badge.svg)
 
 Docker container that contains all the tools needed for correct work of pre-commit
-hooks in <https://github.com/fabasoad/> organization.
+hooks in <https://github.com/fabasoad/> repositories.
