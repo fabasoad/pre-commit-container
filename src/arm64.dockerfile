@@ -10,8 +10,8 @@ RUN apk add --no-cache --update \
     build-base~=0.5 \
     git~=2 \
     openntpd~=6 \
-    py3-pip~=23 \
-    python3-dev~=3.11 \
+    py3-pip~=24 \
+    python3-dev~=3.12 \
     yarn~=1.22
 RUN apk add --no-cache --update --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
     npm~=10
