@@ -17,7 +17,7 @@ RUN apk add --no-cache --update --repository=https://dl-cdn.alpinelinux.org/alpi
     npm~=10
 RUN python -m pip install --upgrade --no-cache-dir --break-system-packages \
     pre-commit==${PRE_COMMIT_VERSION} \
-    setuptools==75.1.0
+    setuptools==75.6.0
 
 # yq
 RUN wget -O /usr/local/bin/yq -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
@@ -46,4 +46,4 @@ RUN wget https://github.com/terraform-linters/tflint/releases/latest/download/tf
     && rm -f tflint_linux_amd64.zip \
     && mv tflint /usr/local/bin/tflint
 
-CMD bash --version;git --version;pip --version;python --version;printf "yarn ";yarn --version;printf "npm ";npm --version;yq --version;printf "actionlint ";actionlint --version;printf "Hadolint. ";hadolint --version;printf "coursier ";coursier version;terraform --version;tflint --version;/bin/sh
+CMD bash
