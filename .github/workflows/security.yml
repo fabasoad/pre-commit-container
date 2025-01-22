@@ -19,8 +19,6 @@ jobs:
   build-image:
     name: Build image
     runs-on: ubuntu-latest
-    env:
-      DOCKER_IMAGE_PATH: "src/x86_64.dockerfile"
     outputs:
       artifact-name: "${{ steps.artifact.outputs.name }}"
     steps:
@@ -43,7 +41,7 @@ jobs:
             ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
             HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
             TERRAFORM_VERSION=${{ steps.versions.outputs.terraform }}
-          file: ${{ env.DOCKER_IMAGE_PATH }}
+          file: src/${{ startsWith(runner.arch, 'ARM') && 'arm64' || 'x86_64' }}.dockerfile
           push: false
       - name: Save image
         id: artifact

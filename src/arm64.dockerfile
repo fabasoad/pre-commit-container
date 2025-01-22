@@ -17,15 +17,17 @@ RUN apk add --no-cache --update --repository=https://dl-cdn.alpinelinux.org/alpi
     npm~=10
 RUN python -m pip install --upgrade --no-cache-dir --break-system-packages \
     pre-commit==${PRE_COMMIT_VERSION} \
-    setuptools==75.6.0
+    setuptools==75.8.0
 
 # yq
 RUN wget -O /usr/local/bin/yq -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_arm64 \
     && chmod +x /usr/local/bin/yq
 # actionlint
-RUN wget -O /usr/local/bin/actionlint.tar.gz -q https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_arm64.tar.gz \
-    && tar -xf /usr/local/bin/actionlint.tar.gz --directory /usr/local/bin \
-    && rm -f /usr/local/bin/actionlint.tar.gz
+RUN mkdir temp-actionlint \
+    && wget -O temp-actionlint/actionlint.tar.gz -q https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_arm64.tar.gz \
+    && tar -xf temp-actionlint/actionlint.tar.gz --directory temp-actionlint \
+    && mv temp-actionlint/actionlint /usr/local/bin/actionlint \
+    && rm -rf temp-actionlint
 # hadolint
 RUN wget -O /usr/local/bin/hadolint -q https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-arm64 \
     && chmod +x /usr/local/bin/hadolint
@@ -36,14 +38,16 @@ RUN wget -O /usr/local/bin/coursier.gz -q https://github.com/coursier/launchers/
     && chmod +x /usr/local/bin/coursier \
     && /usr/local/bin/coursier setup --yes
 # terraform
-RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_arm64.zip \
-    && unzip terraform_${TERRAFORM_VERSION}_linux_arm64.zip \
-    && rm -f terraform_${TERRAFORM_VERSION}_linux_arm64.zip \
-    && mv terraform /usr/local/bin/terraform
+RUN mkdir temp-terraform \
+    && wget -O temp-terraform/terraform.zip -q https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && unzip temp-terraform/terraform.zip -d temp-terraform \
+    && mv temp-terraform/terraform /usr/local/bin/terraform \
+    && rm -rf temp-terraform
 # tflint
-RUN wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_arm64.zip \
-    && unzip tflint_linux_arm64.zip \
-    && rm -f tflint_linux_arm64.zip \
-    && mv tflint /usr/local/bin/tflint
+RUN mkdir temp-tflint \
+    && wget -O temp-tflint/tflint.zip -q https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_arm64.zip \
+    && unzip temp-tflint/tflint.zip -d temp-tflint \
+    && mv temp-tflint/tflint /usr/local/bin/tflint \
+    && rm -rf temp-tflint
 
 CMD bash
