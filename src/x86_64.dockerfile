@@ -24,7 +24,7 @@ RUN wget -O /usr/local/bin/yq -q https://github.com/mikefarah/yq/releases/latest
     && chmod +x /usr/local/bin/yq
 # actionlint
 RUN mkdir temp-actionlint \
-    && wget -O temp-actionlint/actionlint.tar.gz -q https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_arm64.tar.gz \
+    && wget -O temp-actionlint/actionlint.tar.gz -q https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz \
     && tar -xf temp-actionlint/actionlint.tar.gz --directory temp-actionlint \
     && mv temp-actionlint/actionlint /usr/local/bin/actionlint \
     && rm -rf temp-actionlint

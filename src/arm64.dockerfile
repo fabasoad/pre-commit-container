@@ -39,7 +39,7 @@ RUN wget -O /usr/local/bin/coursier.gz -q https://github.com/coursier/launchers/
     && /usr/local/bin/coursier setup --yes
 # terraform
 RUN mkdir temp-terraform \
-    && wget -O temp-terraform/terraform.zip -q https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && wget -O temp-terraform/terraform.zip -q https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_arm64.zip \
     && unzip temp-terraform/terraform.zip -d temp-terraform \
     && mv temp-terraform/terraform /usr/local/bin/terraform \
     && rm -rf temp-terraform
