@@ -44,7 +44,7 @@ repos:
     hooks:
       - id: osv-scanner
         args:
-          - --docker localhost/pre-commit-container:latest
+          - --docker=localhost/pre-commit-container:latest
         verbose: true
         stages: ["pre-push"]
   # Shell
