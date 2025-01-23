@@ -10,14 +10,28 @@ hadolint_version="$(sh "${SCRIPTS_BASE_FOLDER_PATH}/get-tool-version.sh" -t hado
 pre_commit_version="$(sh "${SCRIPTS_BASE_FOLDER_PATH}/get-tool-version.sh" -t pre-commit)"
 terraform_version="$(sh "${SCRIPTS_BASE_FOLDER_PATH}/get-tool-version.sh" -t terraform)"
 
-now="$(date +%s)"
+if command -v podman >/dev/null 2>&1; then
+  cmd="podman"
+else
+  cmd="docker"
+fi
 
-podman build \
-  --tag "pre-commit-container:${now}" \
+case "$(uname -m)" in
+  arm64|aarch64)
+    platform="linux/arm64/v8"
+    ;;
+  *)
+    platform="linux/amd64"
+    ;;
+esac
+
+${cmd} build \
+  --tag "pre-commit-container:$(date +%s)" \
   --tag "pre-commit-container:latest" \
   --build-arg "ACTIONLINT_VERSION=${actionlint_version}" \
   --build-arg "HADOLINT_VERSION=${hadolint_version}" \
   --build-arg "PRE_COMMIT_VERSION=${pre_commit_version}" \
   --build-arg "TERRAFORM_VERSION=${terraform_version}" \
-  --file "${SRC_PATH}/$(uname -m).dockerfile" \
+  --platform "${platform}" \
+  --file "${SRC_PATH}/Dockerfile" \
   .
