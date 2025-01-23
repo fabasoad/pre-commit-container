@@ -37,7 +37,6 @@ jobs:
         with:
           context: .
           build-args: |
-            ARCH=${{ startsWith(runner.arch, 'ARM') && 'arm64' || 'x86_64' }}
             PRE_COMMIT_VERSION=${{ steps.versions.outputs.pre-commit }}
             ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
             HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
