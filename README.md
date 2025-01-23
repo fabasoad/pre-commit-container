@@ -7,3 +7,7 @@
 
 Docker container that contains all the tools needed for correct work of pre-commit
 hooks in <https://github.com/fabasoad/> repositories.
+
+## Contributions
+
+![Alt](https://repobeats.axiom.co/api/embed/4a5d0a359b6a2e87c1ac778a5eab2abc82440695.svg "Repobeats analytics image")

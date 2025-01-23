@@ -10,14 +10,13 @@ hadolint_version="$(sh "${SCRIPTS_BASE_FOLDER_PATH}/get-tool-version.sh" -t hado
 pre_commit_version="$(sh "${SCRIPTS_BASE_FOLDER_PATH}/get-tool-version.sh" -t pre-commit)"
 terraform_version="$(sh "${SCRIPTS_BASE_FOLDER_PATH}/get-tool-version.sh" -t terraform)"
 
-now="$(date +%s)"
-
 podman build \
-  --tag "pre-commit-container:${now}" \
+  --tag "pre-commit-container:$(date +%s)" \
   --tag "pre-commit-container:latest" \
+  --build-arg "ARCH=$(uname -m)" \
   --build-arg "ACTIONLINT_VERSION=${actionlint_version}" \
   --build-arg "HADOLINT_VERSION=${hadolint_version}" \
   --build-arg "PRE_COMMIT_VERSION=${pre_commit_version}" \
   --build-arg "TERRAFORM_VERSION=${terraform_version}" \
-  --file "${SRC_PATH}/$(uname -m).dockerfile" \
+  --file "${SRC_PATH}/Dockerfile" \
   .

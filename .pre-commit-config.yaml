@@ -15,6 +15,13 @@ repos:
         # https://github.com/prettier/prettier/releases
         additional_dependencies: ["prettier@3.4.2"]
         stages: ["pre-commit"]
+      - id: build-docker-image
+        name: Build Docker Image
+        entry: ./scripts/build-image.sh
+        language: system
+        pass_filenames: false
+        verbose: true
+        stages: ["pre-push"]
   # Security
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.5.0
@@ -32,6 +39,14 @@ repos:
           - --grype-args=--by-cve --fail-on=low
           - --hook-args=--log-level debug
         stages: ["pre-push"]
+  - repo: https://github.com/google/osv-scanner
+    rev: v1.9.1
+    hooks:
+      - id: osv-scanner
+        args:
+          - --docker localhost/pre-commit-container:latest
+        verbose: true
+        stages: ["pre-push"]
   # Shell
   - repo: https://github.com/openstack/bashate
     rev: 2.1.1
@@ -44,9 +59,7 @@ repos:
     rev: v2.13.1-beta
     hooks:
       - id: hadolint
-        files: ^(src/.*\.dockerfile)$
         exclude: ^(.*\.dockerignore)$
-        types: [text]
   # Markdown
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.43.0
