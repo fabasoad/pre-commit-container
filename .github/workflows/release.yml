@@ -51,7 +51,7 @@ jobs:
             ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
             HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
             TERRAFORM_VERSION=${{ steps.versions.outputs.terraform }}
-          file: src/${{ startsWith(runner.arch, 'ARM') && 'arm64' || 'x86_64' }}.dockerfile
+          file: src/Dockerfile
           push: "true"
           tags: "${{ steps.meta.outputs.tags }}"
           labels: "${{ steps.meta.outputs.labels }}"
