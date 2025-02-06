@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
 SCRIPT_PATH=$(realpath "$0")
-SCRIPTS_BASE_FOLDER_PATH=$(dirname "$SCRIPT_PATH")
-ROOT_PATH=$(dirname "$SCRIPTS_BASE_FOLDER_PATH")
+SCRIPTS_DIR_PATH=$(dirname "${SCRIPT_PATH}")
+ROOT_PATH=$(dirname "${SCRIPTS_DIR_PATH}")
 
 cut_f=""
 tool=""

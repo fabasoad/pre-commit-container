@@ -1,14 +1,14 @@
 #!/usr/bin/env sh
 
 SCRIPT_PATH=$(realpath "$0")
-SCRIPTS_BASE_FOLDER_PATH=$(dirname "${SCRIPT_PATH}")
-ROOT_PATH=$(dirname "${SCRIPTS_BASE_FOLDER_PATH}")
+SCRIPTS_DIR_PATH=$(dirname "${SCRIPT_PATH}")
+ROOT_PATH=$(dirname "${SCRIPTS_DIR_PATH}")
 SRC_PATH="${ROOT_PATH}/src"
 
-actionlint_version="$(sh "${SCRIPTS_BASE_FOLDER_PATH}/get-tool-version.sh" -t actionlint)"
-hadolint_version="$(sh "${SCRIPTS_BASE_FOLDER_PATH}/get-tool-version.sh" -t hadolint)"
-pre_commit_version="$(sh "${SCRIPTS_BASE_FOLDER_PATH}/get-tool-version.sh" -t pre-commit)"
-terraform_version="$(sh "${SCRIPTS_BASE_FOLDER_PATH}/get-tool-version.sh" -t terraform)"
+actionlint_version="$(sh "${SCRIPTS_DIR_PATH}/get-tool-version.sh" -t actionlint)"
+hadolint_version="$(sh "${SCRIPTS_DIR_PATH}/get-tool-version.sh" -t hadolint)"
+pre_commit_version="$(sh "${SCRIPTS_DIR_PATH}/get-tool-version.sh" -t pre-commit)"
+terraform_version="$(sh "${SCRIPTS_DIR_PATH}/get-tool-version.sh" -t terraform)"
 
 if command -v podman >/dev/null 2>&1; then
   cmd="podman"

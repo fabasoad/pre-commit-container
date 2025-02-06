@@ -6,22 +6,22 @@ ARG PRE_COMMIT_VERSION
 ARG TERRAFORM_VERSION
 
 RUN apk add --no-cache --update \
-    bash~=5 \
-    build-base~=0.5 \
-    git~=2 \
-    openntpd~=6 \
-    py3-pip~=24 \
-    python3-dev~=3.12 \
-    yarn~=1.22 \
-    curl~=8 \
-    jq~=1.7 \
-    yq~=4 \
-    tflint~=0
-RUN apk add --no-cache --update --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
-    npm~=10
+    bash \
+    build-base \
+    git \
+    openntpd \
+    py3-pip \
+    python3-dev \
+    yarn \
+    curl \
+    jq \
+    yq \
+    npm
+RUN apk add --no-cache --update --repository=http://dl-cdn.alpinelinux.org/alpine/v3.20/community \
+    tflint
 RUN python -m pip install --upgrade --no-cache-dir --break-system-packages \
     pre-commit==${PRE_COMMIT_VERSION} \
-    setuptools==75.8.0
+    setuptools
 
 # actionlint
 RUN ACTIONLINT_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "amd64") \
