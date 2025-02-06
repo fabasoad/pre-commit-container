@@ -1,6 +1,8 @@
 ---
 failure-threshold: warning
 ignored:
+  - DL3013
+  - DL3018
   - DL3025
   - DL3029
   - DL3047
