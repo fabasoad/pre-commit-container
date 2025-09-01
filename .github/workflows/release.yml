@@ -23,7 +23,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Get tool versions
         id: versions
         run: |
@@ -63,7 +63,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Get changelog

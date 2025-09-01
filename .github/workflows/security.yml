@@ -23,7 +23,7 @@ jobs:
       artifact-name: "${{ steps.artifact.outputs.name }}"
     steps:
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Get tool versions
         id: versions
         run: |
