@@ -6,6 +6,14 @@ on: # yamllint disable-line rule:truthy
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      security-type:
+        description: What Security scanning you would like to run?
+        required: false
+        default: "all"
+        type: choice
+        options: ["all", "sca", "code-scanning", "image"]
 
 defaults:
   run:
@@ -18,19 +26,22 @@ permissions:
 jobs:
   build-image:
     name: Build image
+    if: (inputs.security-type || 'all') == 'all' || inputs.security-type == 'image'
     runs-on: ubuntu-latest
     outputs:
       artifact-name: "${{ steps.artifact.outputs.name }}"
     steps:
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Get tool versions
         id: versions
         run: |
-          echo "hadolint=$(sh ./scripts/get-tool-version.sh -t hadolint)" >> "$GITHUB_OUTPUT"
-          echo "actionlint=$(sh ./scripts/get-tool-version.sh -t actionlint)" >> "$GITHUB_OUTPUT"
-          echo "pre-commit=$(sh ./scripts/get-tool-version.sh -t pre-commit)" >> "$GITHUB_OUTPUT"
-          echo "terraform=$(sh ./scripts/get-tool-version.sh -t terraform)" >> "$GITHUB_OUTPUT"
+          {
+            echo "hadolint=$(sh ./scripts/get-tool-version.sh -t hadolint)"
+            echo "actionlint=$(sh ./scripts/get-tool-version.sh -t actionlint)"
+            echo "pre-commit=$(sh ./scripts/get-tool-version.sh -t pre-commit)"
+            echo "terraform=$(sh ./scripts/get-tool-version.sh -t terraform)"
+          } >> "$GITHUB_OUTPUT"
       - name: Build image
         id: build-image
         uses: docker/build-push-action@v6
@@ -67,7 +78,7 @@ jobs:
       security-events: write
     uses: fabasoad/reusable-workflows/.github/workflows/wf-security-sast.yml@main
     with:
-      code-scanning: true
-      image: true
+      code-scanning: ${{ (inputs.security-type || 'all') == 'all' || inputs.security-type == 'code-scanning' }}
+      image: ${{ (inputs.security-type || 'all') == 'all' || inputs.security-type == 'image' }}
       image-artifact-name: "${{ needs.build-image.outputs.artifact-name }}"
-      sca: true
+      sca: ${{ (inputs.security-type || 'all') == 'all' || inputs.security-type == 'sca' }}
