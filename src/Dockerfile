@@ -21,6 +21,7 @@ RUN apk add --no-cache --update --repository=http://dl-cdn.alpinelinux.org/alpin
     tflint
 RUN python -m pip install --upgrade --no-cache-dir --break-system-packages \
     pre-commit==${PRE_COMMIT_VERSION} \
+    prek \
     setuptools
 
 # actionlint
