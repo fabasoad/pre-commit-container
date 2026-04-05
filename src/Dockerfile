@@ -1,4 +1,4 @@
-FROM bellsoft/liberica-openjdk-alpine:25
+FROM bellsoft/liberica-openjdk-alpine:26
 
 ARG ACTIONLINT_VERSION
 ARG HADOLINT_VERSION
