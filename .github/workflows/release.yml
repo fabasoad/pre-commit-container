@@ -41,15 +41,14 @@ jobs:
           password: "${{ secrets.GITHUB_TOKEN }}"
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: "."
           build-args: |
-            PRE_COMMIT_VERSION=${{ steps.versions.outputs.pre-commit }}
             ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
             HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
             TERRAFORM_VERSION=${{ steps.versions.outputs.terraform }}
@@ -72,7 +71,7 @@ jobs:
         id: changelog
         uses: simbo/changes-since-last-release-action@v1
       - name: Create release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.ref }}
           name: ${{ github.ref_name }}

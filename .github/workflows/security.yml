@@ -44,11 +44,10 @@ jobs:
           } >> "$GITHUB_OUTPUT"
       - name: Build image
         id: build-image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           build-args: |
-            PRE_COMMIT_VERSION=${{ steps.versions.outputs.pre-commit }}
             ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
             HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
             TERRAFORM_VERSION=${{ steps.versions.outputs.terraform }}
@@ -64,7 +63,7 @@ jobs:
           echo "name=${artifact_name}" >> "$GITHUB_OUTPUT"
       - name: Upload artifact
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: "${{ steps.artifact.outputs.name }}"
           path: "${{ steps.artifact.outputs.path }}"

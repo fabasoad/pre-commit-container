@@ -1,8 +1,7 @@
-FROM bellsoft/liberica-openjdk-alpine:25
+FROM bellsoft/liberica-openjdk-alpine:26
 
 ARG ACTIONLINT_VERSION
 ARG HADOLINT_VERSION
-ARG PRE_COMMIT_VERSION
 ARG TERRAFORM_VERSION
 
 RUN apk add --no-cache --update \
@@ -20,7 +19,6 @@ RUN apk add --no-cache --update \
 RUN apk add --no-cache --update --repository=http://dl-cdn.alpinelinux.org/alpine/v3.20/community \
     tflint
 RUN python -m pip install --upgrade --no-cache-dir --break-system-packages \
-    pre-commit==${PRE_COMMIT_VERSION} \
     prek \
     setuptools
 
