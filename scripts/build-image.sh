@@ -30,7 +30,6 @@ ${cmd} build \
   --tag "pre-commit-container:latest" \
   --build-arg "ACTIONLINT_VERSION=${actionlint_version}" \
   --build-arg "HADOLINT_VERSION=${hadolint_version}" \
-  --build-arg "PRE_COMMIT_VERSION=${pre_commit_version}" \
   --build-arg "TERRAFORM_VERSION=${terraform_version}" \
   --platform "${platform}" \
   --file "${SRC_PATH}/Dockerfile" \
