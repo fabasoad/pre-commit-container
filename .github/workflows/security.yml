@@ -58,10 +58,12 @@ jobs:
           push: false
       - name: Save image
         id: artifact
+        env:
+          STEP_BUILD_IMAGE_OUTPUT_DIGEST: "${{ steps.build-image.outputs.digest }}"
         run: |
           artifact_name="$(date +%s)"
           archive_path="${RUNNER_TEMP}/${artifact_name}.tar"
-          docker save --output "${archive_path}" "${{ steps.build-image.outputs.digest }}"
+          docker save --output "${archive_path}" "${STEP_BUILD_IMAGE_OUTPUT_DIGEST}"
           echo "path=${archive_path}" >> "$GITHUB_OUTPUT"
           echo "name=${artifact_name}" >> "$GITHUB_OUTPUT"
       - name: Upload artifact

@@ -5,6 +5,8 @@ updates:
     directory: "src"
     schedule:
       interval: "monthly"
+    cooldown:
+      default-days: 7
     reviewers:
       - "fabasoad"
     labels:
