@@ -6,6 +6,7 @@ ROOT_PATH=$(dirname "${SCRIPTS_DIR_PATH}")
 SRC_PATH="${ROOT_PATH}/src"
 
 actionlint_version="$(sh "${SCRIPTS_DIR_PATH}/get-tool-version.sh" -t actionlint)"
+go_version="$(sh "${SCRIPTS_DIR_PATH}/get-tool-version.sh" -t golang)"
 hadolint_version="$(sh "${SCRIPTS_DIR_PATH}/get-tool-version.sh" -t hadolint)"
 pre_commit_version="$(sh "${SCRIPTS_DIR_PATH}/get-tool-version.sh" -t pre-commit)"
 terraform_version="$(sh "${SCRIPTS_DIR_PATH}/get-tool-version.sh" -t terraform)"
@@ -29,6 +30,7 @@ ${cmd} build \
   --tag "pre-commit-container:$(date +%s)" \
   --tag "pre-commit-container:latest" \
   --build-arg "ACTIONLINT_VERSION=${actionlint_version}" \
+  --build-arg "GO_VERSION=${go_version}" \
   --build-arg "HADOLINT_VERSION=${hadolint_version}" \
   --build-arg "TERRAFORM_VERSION=${terraform_version}" \
   --platform "${platform}" \

@@ -3,6 +3,7 @@ FROM bellsoft/liberica-openjdk-alpine:26
 ARG ACTIONLINT_VERSION
 ARG HADOLINT_VERSION
 ARG TERRAFORM_VERSION
+ARG GO_VERSION
 
 RUN apk add --no-cache --update \
     bash \
@@ -22,6 +23,22 @@ RUN python -m pip install --upgrade --no-cache-dir --break-system-packages \
     prek \
     setuptools
 
+# go
+RUN GO_ARCH="$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "amd64")" \
+    && wget -O /usr/local/bin/go.tar.gz -q https://go.dev/dl/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz \
+    && tar -xf /usr/local/bin/go.tar.gz --directory /usr/local/bin \
+    && rm -f /usr/local/bin/go.tar.gz
+
+ENV GOROOT="/usr/local/bin/go"
+ENV GOPATH="${BIN_HOME}/go"
+ENV GOBIN="${GOROOT}/bin"
+ENV PATH="${PATH}:${GOBIN}:${GOPATH}/bin"
+
+# golangci-lint
+ARG GOLANGCI_LINT_VERSION=2.12.2
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+RUN wget -O- -nv https://golangci-lint.run/install.sh | sh -s "v${GOLANGCI_LINT_VERSION}"
+
 # actionlint
 RUN ACTIONLINT_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "amd64") \
     && mkdir temp-actionlint \
@@ -29,10 +46,12 @@ RUN ACTIONLINT_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "amd
     && tar -xf temp-actionlint/actionlint.tar.gz --directory temp-actionlint \
     && mv temp-actionlint/actionlint /usr/local/bin/actionlint \
     && rm -rf temp-actionlint
+
 # hadolint
 RUN HADOLINT_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "x86_64") \
     && wget -O /usr/local/bin/hadolint -q https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-${HADOLINT_ARCH} \
     && chmod +x /usr/local/bin/hadolint
+
 # terraform
 RUN TERRAFORM_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "amd64") \
     && mkdir temp-terraform \
@@ -40,6 +59,7 @@ RUN TERRAFORM_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "amd6
     && unzip temp-terraform/terraform.zip -d temp-terraform \
     && mv temp-terraform/terraform /usr/local/bin/terraform \
     && rm -rf temp-terraform
+
 # coursier (needed for https://github.com/dustinsand/pre-commit-jvm)
 RUN COURSIER_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "aarch64" || echo "x86_64") \
     && wget -O /usr/local/bin/coursier.gz -q https://github.com/coursier/launchers/raw/master/cs-${COURSIER_ARCH}-pc-linux.gz \
