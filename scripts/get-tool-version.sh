@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
 SCRIPT_PATH=$(realpath "$0")
-SCRIPTS_DIR_PATH=$(dirname "${SCRIPT_PATH}")
-ROOT_PATH=$(dirname "${SCRIPTS_DIR_PATH}")
+SCRIPTS_BASE_FOLDER_PATH=$(dirname "$SCRIPT_PATH")
+ROOT_PATH=$(dirname "$SCRIPTS_BASE_FOLDER_PATH")
 
 cut_f=""
 tool=""
@@ -26,7 +26,7 @@ while getopts "v:t:" arg; do
 done
 
 if [ -z "${tool}" ]; then
-  echo "Not tool specified"
+  echo "No tool specified"
   exit 1
 fi
 
@@ -34,15 +34,15 @@ asdf_file=".tool-versions"
 requirements_file="requirements.txt"
 
 # try to read .tool-versions file first
-version=$(grep -Eo "${tool} [0-9.pre-]+" "${ROOT_PATH}/${asdf_file}" | cut -d ' ' -f 2)
+version=$(grep -Eo "${tool} [0-9.pre-]+" "${ROOT_PATH}/${asdf_file}" 2>/dev/null | cut -d ' ' -f 2)
 
-if [ -z "${version}" ]; then
+if [ -z "${version}" ] && [ -f "${ROOT_PATH}/${requirements_file}" ]; then
   # if tool is not present in .tool-versions file then try to read requirements.txt
-  version=$(grep -Eo "${tool}==[0-9.pre-]+" "${ROOT_PATH}/${requirements_file}" | cut -d '=' -f 3)
+  version=$(grep -Eo "${tool}==[0-9.pre-]+" "${ROOT_PATH}/${requirements_file}" 2>/dev/null | cut -d '=' -f 3)
 fi
 
 if [ -z "${version}" ]; then
-  echo "${tool} is not present neither in ${asdf_file} nor in ${requirements_file}"
+  echo "${tool} is present in neither ${asdf_file} nor ${requirements_file}"
   exit 1
 fi
 

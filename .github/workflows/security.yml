@@ -19,46 +19,51 @@ defaults:
   run:
     shell: sh
 
-permissions:
-  contents: read
-  security-events: write
-
 jobs:
   build-image:
     name: Build image
     if: contains(fromJSON('["all", "image"]'), github.event.inputs.security-type || 'all')
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     outputs:
       artifact-name: "${{ steps.artifact.outputs.name }}"
     steps:
       - name: Checkout ${{ github.repository }}
         uses: actions/checkout@v7
+        with:
+          persist-credentials: "false"
       - name: Get tool versions
         id: versions
         run: |
           {
-            echo "hadolint=$(sh ./scripts/get-tool-version.sh -t hadolint)"
             echo "actionlint=$(sh ./scripts/get-tool-version.sh -t actionlint)"
+            echo "go=$(sh ./scripts/get-tool-version.sh -t golang)"
+            echo "hadolint=$(sh ./scripts/get-tool-version.sh -t hadolint)"
             echo "pre-commit=$(sh ./scripts/get-tool-version.sh -t pre-commit)"
             echo "terraform=$(sh ./scripts/get-tool-version.sh -t terraform)"
           } >> "$GITHUB_OUTPUT"
       - name: Build image
         id: build-image
-        uses: docker/build-push-action@v7
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: .
           build-args: |
             ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
+            GO_VERSION=${{ steps.versions.outputs.go }}
             HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
             TERRAFORM_VERSION=${{ steps.versions.outputs.terraform }}
           file: src/Dockerfile
           push: false
       - name: Save image
         id: artifact
+        env:
+          STEP_BUILD_IMAGE_OUTPUT_DIGEST: "${{ steps.build-image.outputs.digest }}"
         run: |
           artifact_name="$(date +%s)"
           archive_path="${RUNNER_TEMP}/${artifact_name}.tar"
-          docker save --output "${archive_path}" "${{ steps.build-image.outputs.digest }}"
+          docker save --output "${archive_path}" "${STEP_BUILD_IMAGE_OUTPUT_DIGEST}"
           echo "path=${archive_path}" >> "$GITHUB_OUTPUT"
           echo "name=${artifact_name}" >> "$GITHUB_OUTPUT"
       - name: Upload artifact
