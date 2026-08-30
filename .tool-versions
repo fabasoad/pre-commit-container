@@ -1,4 +1,4 @@
 actionlint 1.7.12
-golang 1.26.5
-hadolint 2.14.0
-terraform 1.15.8
+golang 1.27.0
+hadolint 2.15.1
+terraform 1.16.0
