@@ -4,6 +4,7 @@ ARG ACTIONLINT_VERSION
 ARG HADOLINT_VERSION
 ARG TERRAFORM_VERSION
 ARG GO_VERSION
+ARG TFLINT_VERSION
 
 RUN apk add --no-cache --update \
     bash \
@@ -17,8 +18,6 @@ RUN apk add --no-cache --update \
     jq \
     yq \
     npm
-RUN apk add --no-cache --update --repository=http://dl-cdn.alpinelinux.org/alpine/v3.20/community \
-    tflint
 RUN python -m pip install --upgrade --no-cache-dir --break-system-packages \
     prek \
     setuptools
@@ -59,6 +58,15 @@ RUN TERRAFORM_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "amd6
     && unzip temp-terraform/terraform.zip -d temp-terraform \
     && mv temp-terraform/terraform /usr/local/bin/terraform \
     && rm -rf temp-terraform
+
+# tflint
+RUN TFLINT_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "amd64") \
+    && mkdir temp-tflint \
+    && wget -O temp-tflint/tflint.zip -q https://github.com/terraform-linters/tflint/releases/download/v${TFLINT_VERSION}/tflint_linux_${TFLINT_ARCH}.zip \
+    && unzip temp-tflint/tflint.zip -d temp-tflint \
+    && mv temp-tflint/tflint /usr/local/bin/tflint \
+    && chmod +x /usr/local/bin/tflint \
+    && rm -rf temp-tflint
 
 # coursier (needed for https://github.com/dustinsand/pre-commit-jvm)
 RUN COURSIER_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "aarch64" || echo "x86_64") \
