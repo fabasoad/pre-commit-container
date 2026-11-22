@@ -41,6 +41,7 @@ jobs:
             echo "actionlint=$(sh ./scripts/get-tool-version.sh -t actionlint)"
             echo "go=$(sh ./scripts/get-tool-version.sh -t golang)"
             echo "hadolint=$(sh ./scripts/get-tool-version.sh -t hadolint)"
+            echo "npm=$(sh ./scripts/get-tool-version.sh -t npm)"
             echo "pre-commit=$(sh ./scripts/get-tool-version.sh -t pre-commit)"
             echo "terraform=$(sh ./scripts/get-tool-version.sh -t terraform)"
             echo "tflint=$(sh ./scripts/get-tool-version.sh -t tflint)"
@@ -54,6 +55,7 @@ jobs:
             ACTIONLINT_VERSION=${{ steps.versions.outputs.actionlint }}
             GO_VERSION=${{ steps.versions.outputs.go }}
             HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
+            NPM_VERSION=${{ steps.versions.outputs.npm }}
             TERRAFORM_VERSION=${{ steps.versions.outputs.terraform }}
             TFLINT_VERSION=${{ steps.versions.outputs.tflint }}
           file: src/Dockerfile
