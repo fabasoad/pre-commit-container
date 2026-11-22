@@ -43,7 +43,7 @@ ENV GOBIN="${GOROOT}/bin"
 ENV PATH="${PATH}:${GOBIN}:${GOPATH}/bin"
 
 # golangci-lint
-ARG GOLANGCI_LINT_VERSION=2.13.2
+ARG GOLANGCI_LINT_VERSION=2.15.0
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 RUN wget -O- -nv https://golangci-lint.run/install.sh | sh -s "v${GOLANGCI_LINT_VERSION}"
 
