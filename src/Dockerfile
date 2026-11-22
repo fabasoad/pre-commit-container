@@ -5,6 +5,7 @@ ARG HADOLINT_VERSION
 ARG TERRAFORM_VERSION
 ARG GO_VERSION
 ARG TFLINT_VERSION
+ARG NPM_VERSION
 
 RUN apk add --no-cache --update \
     bash \
@@ -21,6 +22,14 @@ RUN apk add --no-cache --update \
 RUN python -m pip install --upgrade --no-cache-dir --break-system-packages \
     prek \
     setuptools
+
+# npm (replace the Alpine package in place: the modules it bundles carry known vulnerabilities)
+RUN mkdir temp-npm \
+    && wget -O temp-npm/npm.tgz -q https://registry.npmjs.org/npm/-/npm-${NPM_VERSION}.tgz \
+    && rm -rf /usr/lib/node_modules/npm \
+    && mkdir /usr/lib/node_modules/npm \
+    && tar -xzf temp-npm/npm.tgz --directory /usr/lib/node_modules/npm --strip-components 1 \
+    && rm -rf temp-npm
 
 # go
 RUN GO_ARCH="$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "amd64")" \
