@@ -38,7 +38,7 @@ RUN GO_ARCH="$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "amd64")" \
     && rm -f /usr/local/bin/go.tar.gz
 
 ENV GOROOT="/usr/local/bin/go"
-ENV GOPATH="${BIN_HOME}/go"
+ENV GOPATH="/go"
 ENV GOBIN="${GOROOT}/bin"
 ENV PATH="${PATH}:${GOBIN}:${GOPATH}/bin"
 
