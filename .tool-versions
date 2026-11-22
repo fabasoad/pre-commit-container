@@ -1,5 +1,6 @@
 actionlint 1.7.12
 golang 1.27.4
 hadolint 2.15.1
+npm 12.2.3
 terraform 1.17.2
 tflint 0.66.0
