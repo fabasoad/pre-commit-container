@@ -83,6 +83,6 @@ RUN COURSIER_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "aarch64" || echo "x86
     && gzip -d /usr/local/bin/coursier.gz \
     && rm -f /usr/local/bin/coursier.gz \
     && chmod +x /usr/local/bin/coursier \
-    && /usr/local/bin/coursier setup --yes
+    && /usr/local/bin/coursier setup --yes --apps scala-cli,scala,scalac,sbt,scalafmt
 
 CMD bash
