@@ -35,6 +35,7 @@ jobs:
             echo "hadolint=$(sh ./scripts/get-tool-version.sh -t hadolint)"
             echo "pre-commit=$(sh ./scripts/get-tool-version.sh -t pre-commit)"
             echo "terraform=$(sh ./scripts/get-tool-version.sh -t terraform)"
+            echo "tflint=$(sh ./scripts/get-tool-version.sh -t tflint)"
           } >> "$GITHUB_OUTPUT"
       - name: Log in to the Container registry
         uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
@@ -56,6 +57,7 @@ jobs:
             GO_VERSION=${{ steps.versions.outputs.go }}
             HADOLINT_VERSION=${{ steps.versions.outputs.hadolint }}
             TERRAFORM_VERSION=${{ steps.versions.outputs.terraform }}
+            TFLINT_VERSION=${{ steps.versions.outputs.tflint }}
           file: src/Dockerfile
           push: "true"
           tags: "${{ steps.meta.outputs.tags }}"
