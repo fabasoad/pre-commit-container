@@ -7,6 +7,7 @@ ARG GO_VERSION
 ARG TFLINT_VERSION
 ARG NPM_VERSION
 
+RUN apk upgrade --no-cache --update
 RUN apk add --no-cache --update \
     bash \
     build-base \
