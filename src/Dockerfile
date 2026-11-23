@@ -79,8 +79,9 @@ RUN TFLINT_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "arm64" || echo "amd64")
     && rm -rf temp-tflint
 
 # coursier (needed for https://github.com/dustinsand/pre-commit-jvm)
+ARG COURSIER_VERSION=2.1.27
 RUN COURSIER_ARCH=$([ "$(uname -m)" = "aarch64" ] && echo "aarch64" || echo "x86_64") \
-    && wget -O /usr/local/bin/coursier.gz -q https://github.com/coursier/launchers/raw/master/cs-${COURSIER_ARCH}-pc-linux.gz \
+    && wget -O /usr/local/bin/coursier.gz -q https://github.com/coursier/coursier/releases/download/v${COURSIER_VERSION}/cs-${COURSIER_ARCH}-pc-linux.gz \
     && gzip -d /usr/local/bin/coursier.gz \
     && rm -f /usr/local/bin/coursier.gz \
     && chmod +x /usr/local/bin/coursier \
